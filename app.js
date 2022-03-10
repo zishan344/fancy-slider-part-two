@@ -16,7 +16,7 @@ const KEY = "15674931-a9d714b6e9d654524df198e00&q";
 const showImages = (images) => {
   imagesArea.style.display = "block";
   gallery.innerHTML = "";
-  console.log(images);
+
   // show gallery title
   galleryHeader.style.display = "flex";
   images.forEach((image) => {
@@ -67,9 +67,20 @@ const createSlider = () => {
 
   sliderContainer.appendChild(prevNext);
   document.querySelector(".main").style.display = "block";
+
   // hide image aria
   imagesArea.style.display = "none";
   const duration = document.getElementById("duration").value || 1000;
+
+  if (duration < 0) {
+    document.querySelector(".main").style.display = "none";
+    imagesArea.style.display = "block";
+    return alert("Duration must be positive value!");
+  } else if (typeof duration != "number") {
+    document.querySelector(".main").style.display = "none";
+    imagesArea.style.display = "block";
+    return alert("Duration must be a number value");
+  }
   sliders.forEach((slide) => {
     let item = document.createElement("div");
     item.className = "slider-item";
@@ -78,6 +89,7 @@ const createSlider = () => {
     alt="">`;
     sliderContainer.appendChild(item);
   });
+
   changeSlide(0);
   timer = setInterval(function () {
     slideIndex++;
@@ -116,8 +128,11 @@ searchBtn.addEventListener("click", function () {
   const search = document.getElementById("search");
   getImages(search.value);
   sliders.length = 0;
+  // clear input fields;
+  search.value = "";
 });
 
 sliderBtn.addEventListener("click", function () {
   createSlider();
+  document.getElementById("duration").value = "";
 });
